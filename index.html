@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="дуддл"><meta name="theme-color" content="#0b0b0c">
+<title>дуддл — давай узнаем друг друга лучше · 18+</title>
+<meta name="description" content="дуддл — карточная игра в откровенность для компаний 18+. 100 вопросов: компания, дилеммы, чернуха, исповедь, секс.">
+<link rel="canonical" href="https://duddl.ru/">
+<meta property="og:type" content="website"><meta property="og:title" content="дуддл — игра в откровенность 18+">
+<meta property="og:description" content="100 вопросов на грани. Тяните карты, отвечайте честно. Бесплатно онлайн.">
+<meta property="og:url" content="https://duddl.ru/"><meta property="og:image" content="https://duddl.ru/assets/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<style>
+  @font-face{font-family:"Sabaq";src:url(assets/sabaq.woff2) format("woff2");font-weight:400;font-display:swap;}
+  @font-face{font-family:"Onest";src:url(assets/onest.woff2) format("woff2");font-weight:400;font-display:swap;}
+  @font-face{font-family:"Onest";src:url(assets/onest-bold.woff2) format("woff2");font-weight:700;font-display:swap;}
+  @font-face{font-family:"MartianMono";src:url(assets/martianmono.woff2) format("woff2");font-weight:500;font-display:swap;}
+  :root{--bg:#0b0b0c;--card:#0f0f11;--ink:#f3efe6;--dim:#8a8a92;--muted:#54545c;--red:#d1302f;
+    --line:#222228;--field:#161619;--field2:#202026;
+    --c-комп:#2f9e5f;--c-дил:#3b7bef;--c-черн:#9a9aa4;--c-исп:#e9e3d4;--c-секс:#d1302f;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+  html,body{height:100%;margin:0;background:var(--bg);}
+  body{color:var(--ink);font-family:"Onest",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;
+    display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
+  .sabaq{font-family:"Sabaq",sans-serif;}.mono{font-family:"MartianMono",monospace;font-variant-numeric:tabular-nums;}
+  .pt{display:inline-block;width:.17em;height:.17em;background:currentColor;margin-left:.08em;vertical-align:baseline;}
+  .screen{position:fixed;inset:0;display:none;flex-direction:column;text-transform:lowercase;
+    padding:calc(env(safe-area-inset-top) + 22px) 22px calc(env(safe-area-inset-bottom) + 20px);}
+  .screen.on{display:flex;}
+  .btn{border:0;border-radius:14px;background:var(--red);color:#fff;font-family:"Onest";font-weight:700;font-size:16px;
+    padding:17px 28px;cursor:pointer;transition:.15s;text-transform:lowercase;}
+  .btn:active{transform:scale(.98);}.btn.ghost{background:var(--field2);color:var(--ink);}
+  .btn[disabled]{opacity:.3;pointer-events:none;}
+  #age{z-index:200;background:var(--bg);align-items:center;justify-content:center;text-align:center;}
+  #age .mark{font-size:clamp(54px,18vw,96px);line-height:.9;}
+  #age .badge{color:var(--red);font-weight:700;letter-spacing:.22em;font-size:13px;margin:22px 0 24px;}
+  #age .sub{color:var(--dim);font-size:14px;line-height:1.55;max-width:300px;margin-bottom:30px;}
+  #age .small{color:var(--muted);font-size:12px;margin-top:18px;}
+  #setup{overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;align-items:center;text-align:center;}
+  #setup::-webkit-scrollbar{display:none;}
+  .logo{font-size:clamp(44px,15vw,72px);line-height:.9;margin-top:4px;}
+  .tag{color:var(--dim);font-size:13px;margin-top:9px;}.tag b{color:var(--red);font-weight:700;}
+  .block{width:100%;max-width:440px;margin-top:28px;text-align:left;}
+  .block h3{font-weight:700;font-size:11px;letter-spacing:.18em;color:var(--muted);margin:0 0 12px;}
+  .prow{display:flex;gap:8px;}
+  #pName{flex:1;-webkit-appearance:none;appearance:none;background:var(--field);color:var(--ink);border:1px solid var(--line);
+    border-radius:13px;font-family:"Onest";font-size:16px;padding:15px 17px;outline:none;text-transform:lowercase;}
+  #pName::placeholder{color:var(--muted);}#pName:focus{border-color:var(--red);}
+  #pAdd{border:0;border-radius:13px;background:var(--field2);color:var(--ink);font-family:"Sabaq";font-size:26px;width:54px;cursor:pointer;}
+  #players{margin-top:12px;display:flex;flex-direction:column;gap:7px;}
+  .pi{display:flex;align-items:center;gap:11px;background:var(--field);border:1px solid var(--line);border-radius:12px;
+    padding:12px 13px;transition:box-shadow .15s,opacity .15s;}
+  .pi.drag{opacity:.92;box-shadow:0 12px 28px rgba(0,0,0,.5);border-color:#33232a;}
+  .pi .grip{width:16px;height:18px;cursor:grab;touch-action:none;position:relative;flex-shrink:0;}
+  .pi .grip::before{content:"";position:absolute;left:2px;right:2px;top:4px;height:2px;border-radius:2px;background:var(--muted);box-shadow:0 4px 0 var(--muted),0 8px 0 var(--muted);}
+  .pi .pn{flex:1;font-size:15px;}
+  .pi .pg{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;cursor:pointer;border:1px solid var(--line);}
+  .pi .pg.f{color:#e87fa6;border-color:#3a2530;}.pi .pg.m{color:#6fa8ef;border-color:#1f2c3f;}
+  .pi .px{color:var(--muted);font-size:17px;cursor:pointer;padding:0 3px;}
+  .empty{color:var(--muted);font-size:13px;padding:4px 2px;}
+  .cat,.opt{display:flex;align-items:center;gap:13px;background:var(--field);border:1px solid var(--line);border-radius:13px;padding:14px 16px;cursor:pointer;transition:.15s;margin-bottom:8px;}
+  .cat .nm{font-family:"Sabaq";font-size:19px;flex:1;}.cat .cnt{font-family:"MartianMono";font-size:12px;color:var(--muted);}
+  .tg{width:44px;height:26px;border-radius:999px;background:#2c2c33;position:relative;transition:.2s;flex-shrink:0;}
+  .tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;}
+  .cat.on .tg,.opt.on .tg{background:var(--red);}.cat.on .tg::after,.opt.on .tg::after{transform:translateX(18px);}
+  .cat.off{opacity:.4;}.cat.off .nm{color:var(--dim);}
+  .cat.lock{opacity:.4;cursor:not-allowed;}.cat .lockhint{font-size:11px;color:var(--muted);margin-right:4px;}
+  .opt .nm{font-family:"Onest";font-weight:700;font-size:14px;flex:1;}
+  .seg{display:flex;background:var(--field);border:1px solid var(--line);border-radius:13px;padding:4px;margin-bottom:8px;}
+  .seg b{flex:1;text-align:center;padding:11px;border-radius:10px;font-weight:700;font-size:14px;color:var(--dim);cursor:pointer;transition:.15s;}
+  .seg b.sel{background:var(--field2);color:var(--ink);}
+  #startWrap{width:100%;max-width:440px;margin-top:24px;}#startBtn{width:100%;}
+  #setupErr{color:var(--muted);font-size:12px;text-align:center;margin-top:11px;min-height:1em;}
+  #game{align-items:center;}
+  .topbar{width:100%;max-width:440px;display:flex;align-items:center;justify-content:space-between;min-height:34px;}
+  .back{border:0;background:transparent;color:var(--dim);font-weight:700;font-size:14px;padding:8px 4px;cursor:pointer;}
+  .tmr{font-family:"MartianMono";font-size:13px;letter-spacing:.02em;display:none;align-items:center;gap:7px;}
+  .tmr.on{display:flex;}.tmr .dot{width:8px;height:8px;border-radius:50%;background:var(--tc,var(--red));}
+  .tmr .tc{color:var(--tc,var(--red));}.tmr .tt{color:var(--muted);}
+  .prog{font-family:"MartianMono";font-size:13px;color:var(--muted);}
+  .cardwrap{flex:1;display:flex;align-items:center;justify-content:center;width:100%;perspective:1600px;}
+  .card{width:min(85vw,360px);aspect-ratio:3/4.15;cursor:pointer;position:relative;will-change:transform,opacity;transition:transform .3s ease,opacity .3s ease;}
+  .card.out{transform:translateY(26px) scale(.94);opacity:0;}
+  .inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.45,0,.15,1);will-change:transform;}
+  .card.flip .inner{transform:rotateY(180deg);}
+  .face{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;padding:26px 24px;box-shadow:0 28px 64px rgba(0,0,0,.6);transform:translateZ(0);}
+  .face .num{position:absolute;top:16px;right:18px;font-family:"MartianMono";font-size:11px;color:var(--muted);z-index:2;}
+  .face .wm{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-family:"Sabaq";font-size:18px;color:var(--muted);}
+  .back-face{justify-content:center;align-items:center;text-align:center;}
+  .back-face .bmark{font-family:"Sabaq";font-size:clamp(40px,12vw,54px);line-height:.9;}
+  .back-face .bline{width:42px;height:3px;background:var(--red);border-radius:2px;margin:18px 0;}
+  .back-face .blbl{font-weight:700;font-size:11px;letter-spacing:.22em;color:var(--muted);}
+  .back-face .bturn{font-family:"Sabaq";font-size:clamp(26px,9vw,38px);margin-top:6px;}
+  .back-face .bhint{position:absolute;bottom:20px;left:0;right:0;font-size:12px;color:var(--muted);}
+  .front-face{transform:rotateY(180deg);align-items:center;}
+  .front-face::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(135% 95% at 0% 0%,var(--cat,transparent) 0%,transparent 46%);opacity:.4;}
+  .front-face .fcat{position:relative;margin-top:2px;font-family:"Sabaq";font-size:17px;color:var(--cat,var(--red));}
+  .front-face .fq{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;width:100%;min-height:0;max-height:60%;margin:auto 0;}
+  .front-face .fq span{line-height:1.26;}
+  /* драм-отсчёт таймера */
+  .cd{position:fixed;inset:0;z-index:160;display:none;flex-direction:column;align-items:center;justify-content:center;
+    background:rgba(7,7,8,.92);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);text-transform:lowercase;}
+  .cd.on{display:flex;}
+  .cd .cdn{font-family:"Sabaq";font-size:40vw;line-height:.8;color:var(--cdc,var(--ink));}
+  .cd .cdl{margin-top:14px;font-weight:700;font-size:13px;letter-spacing:.2em;color:var(--muted);}
+  .cd .cdl b{color:var(--cdc,var(--red));}
+  @keyframes pop{from{transform:scale(.55);opacity:.3}to{transform:scale(1);opacity:1}}
+  #howto{align-items:center;justify-content:center;text-align:center;}
+  #howto .rules{max-width:420px;color:var(--dim);font-size:15px;line-height:1.55;margin-top:22px;text-align:left;}
+  #howto .rules p{margin:9px 0;}#howto .rules b{color:var(--ink);font-weight:700;}
+  .rules-link{color:var(--muted);font-size:12px;margin-top:8px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+  #instHint{max-width:440px;margin:14px auto 0;font-size:12px;color:var(--muted);display:flex;gap:10px;align-items:center;justify-content:center;}
+  #instHint x{cursor:pointer;font-style:normal;color:var(--dim);font-size:15px;}
+  #intro{position:fixed;inset:0;z-index:180;background:#000;opacity:0;pointer-events:none;transition:opacity .4s ease;}
+  #intro.on{opacity:1;pointer-events:auto;}
+  .rt{display:flex;align-items:center;gap:12px;}
+  .sndbtn{border:0;background:transparent;color:var(--dim);cursor:pointer;padding:4px;display:flex;align-items:center;}
+  .sndbtn svg{display:block;}
+  #end,#pay{align-items:center;justify-content:center;text-align:center;}
+  #end .et,#pay .et{font-family:"Sabaq";font-size:clamp(32px,10vw,46px);line-height:1;}
+  #end .es,#pay .es{color:var(--dim);font-size:14px;margin:14px 0 28px;}
+  #end .erow,#pay .erow{display:flex;flex-direction:column;gap:10px;width:min(82vw,300px);}
+</style></head><body>
+<section id="age" class="screen on">
+  <div class="mark sabaq">дуддл<i class="pt"></i></div><div class="badge">только 18+</div>
+  <div class="sub">игра для взрослых: откровения, провокации, тёмные темы. продолжая, ты подтверждаешь, что тебе есть 18 лет.</div>
+  <button class="btn" id="ageOk">мне есть 18</button><div class="small">давай узнаем друг друга лучше</div>
+</section>
+<section id="howto" class="screen">
+  <div class="logo sabaq" style="font-size:clamp(38px,12vw,60px)">правила</div>
+  <div class="rules">
+    <p>· садитесь компанией, добавьте <b>имена игроков</b>.</p>
+    <p>· по очереди тяните карту и отвечайте на вопрос — <b>честно</b>.</p>
+    <p>· 5 категорий: компания, дилеммы, чернуха, исповедь, секс.</p>
+    <p>· <b>пропускать нельзя</b> — на то и игра.</p>
+    <p>· режим таймера подкидывает категорию случайному игроку.</p>
+    <p>· <b>18+</b>. играйте только с теми, кому доверяете.</p>
+  </div>
+  <button class="btn" id="howtoOk" style="margin-top:26px">поехали</button>
+</section>
+<section id="setup" class="screen">
+  <div class="logo sabaq">дуддл<i class="pt"></i></div>
+  <div class="tag">давай узнаем друг друга лучше · <b>18+</b></div>
+  <div class="rules-link" id="rulesLink">как играть</div>
+  <div class="block"><h3>игроки</h3>
+    <div class="prow"><input id="pName" type="text" placeholder="имя игрока" maxlength="14" autocomplete="off"><button id="pAdd">+</button></div>
+    <div id="players"><div class="empty">добавь минимум двух игроков · перетаскивай для порядка</div></div></div>
+  <div class="block"><h3>порядок хода</h3>
+    <div class="seg" id="orderSeg"><b data-v="circle" class="sel">по кругу</b><b data-v="random">случайно</b></div>
+    <div class="opt" id="timerOpt"><span class="nm">режим таймера</span><span class="tg"></span></div></div>
+  <div class="block"><h3>длина партии</h3>
+    <div class="seg" id="lenSeg"><b data-v="20">20 карт</b><b data-v="40">40 карт</b><b data-v="0" class="sel">вся</b></div></div>
+  <div class="block"><h3>категории</h3><div id="cats"></div></div>
+  <div id="startWrap"><button class="btn" id="startBtn" disabled>играть</button><div id="setupErr"></div>
+    <div id="instHint">совет: добавь дуддл на главный экран — играть удобнее <x id="instX">&times;</x></div></div>
+</section>
+<section id="game" class="screen">
+  <div class="topbar"><button class="back" id="toMenu">‹ меню</button>
+    <div class="tmr mono" id="tmr"><span class="dot"></span><span class="tc" id="tmrCat"></span><span class="tt" id="tmrTime"></span></div>
+    <div class="rt"><button class="sndbtn" id="shareBtn" aria-label="поделиться"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13"/><path d="m8 7 4-4 4 4"/></svg></button><button class="sndbtn" id="sndBtn" aria-label="звук"></button><div class="prog mono" id="prog">00 / 00</div></div></div>
+  <div class="cardwrap"><div class="card" id="card"><div class="inner">
+    <div class="face back-face"><div class="num mono" id="bnum"></div>
+      <div class="bmark sabaq">дуддл<i class="pt"></i></div><div class="bline"></div>
+      <div class="blbl">ход</div><div class="bturn sabaq" id="bturn">—</div>
+      <div class="bhint">нажми, чтобы открыть карту</div></div>
+    <div class="face front-face" id="front"><div class="num mono" id="fnum"></div>
+      <div class="fcat sabaq" id="fcat"></div><div class="fq"><span id="fqt"></span></div>
+      <div class="wm sabaq">дуддл<i class="pt"></i></div></div>
+  </div></div></div>
+  <div style="max-width:440px;margin-top:8px;font-size:13px;color:var(--muted);min-height:1.2em;text-align:center;" id="ghint">тап — открыть · ещё тап — следующий</div>
+</section>
+<div id="intro"></div>
+<div class="cd" id="cd"><div class="cdn sabaq" id="cdn">5</div><div class="cdl">приготовься · <b id="cdcat"></b></div></div>
+<section id="pay" class="screen">
+  <div class="et sabaq">лимит закончился</div><div class="es">16 вопросов бесплатно.<br>все 100 — навсегда за 299 ₽</div>
+  <div class="erow"><a class="btn" id="payBtn" target="_blank" rel="noopener">открыть всё</a>
+  <button class="btn ghost" id="payMenu">в меню</button></div>
+  <div class="es" style="margin:18px 0 0;font-size:12px"><a href="legal.html" style="color:inherit">оферта · возврат · контакты</a></div>
+</section>
+<section id="end" class="screen">
+  <div class="et sabaq">колода закончилась</div><div class="es">все карты сыграны. ещё круг?</div>
+  <div class="erow"><button class="btn" id="again">заново</button>
+  <button class="btn ghost" id="share">поделиться</button>
+  <a class="btn ghost" id="tgBtn" target="_blank" rel="noopener">наш телеграм</a>
+  <button class="btn ghost" id="endMenu">в меню</button></div>
+</section>
+<script>
+(function(){
+  var Q={"компания": ["Кому ты не доверяешь больше всего в этой компании?", "Кто тебе больше всех нравится в компании, а кто меньше всех?", "Кто из компании, по твоему мнению, способен подставить тебя ради денег?", "Кто из компании раздражает тебя больше всех?", "Назови человека из компании, чьё мнение для тебя важнее остальных", "С кем из компании ты бы поехал{|а} в путешествие на месяц, а с кем — ни за что?", "Если бы пришлось взять одного человека из компании в долгий запой — кто бы это был?", "Кто в этой компании самый жадный, по твоему мнению?", "Кто из присутствующих, по-твоему, чаще всех врёт?", "Кого из компании ты считаешь самым глупым? Только честно", "Кто из компании никогда не добьётся того, о чём мечтает?", "Кого из компании ты считаешь самым скучным человеком?", "Как ты считаешь, кто из присутствующих разбогатеет раньше остальных?", "Кто из присутствующих знает о тебе то, чего не знают остальные?", "Кому из компании ты бы не дал{|а} в долг ни при каких обстоятельствах?", "Кто в этой компании лишний, по твоему ощущению?", "Кто здесь больше всех старается понравиться остальным?", "Кто из присутствующих в одиночестве совсем не такой, каким кажется в компании?", "Кто из присутствующих перебарщивает с алкоголем чаще остальных?", "С кем из присутствующих ты реально хотел{|а} бы переспать?"], "дилеммы": ["Отдать своего партнёра другому ради секса за квартиру в Москве — согласишься?", "Если бы ты случайно убил{|а} человека, сообщил{|а} бы полиции?", "Кого ты любишь больше, отца или мать? Почему?", "Готов{|а} ли ты сейчас побриться налысо за 500 тысяч рублей?", "Как бы ты поступил{|а} при незапланированной беременности вне отношений?", "Переехал{|а} бы навсегда в другую страну за 1 млн долларов, без права вернуться?", "Тебе предлагают квартиру в центре Москвы. Цена — жизнь случайного старика. Согласишься?", "Ты бы согласил{ся|ась} никогда больше не видеть свою мать за 30 миллионов рублей?", "10 миллионов рублей, но один из твоих родителей умрёт на год раньше. Согласишься?", "Готов{|а} ли ты сделать на лице татуировку с матерным словом за 3 миллиона рублей?", "Ты наш{ёл|ла} кошелёк: 200 тысяч рублей и документы владельца. Твои действия?", "Кассир по ошибке не пробил часть твоего товара. Скажешь об этом?", "Друг изменяет жене, с которой ты в хороших отношениях. Расскажешь ей?", "В горящем доме твой ребёнок и твоя мать. Можешь вытащить только одного. Кого?", "Что хуже: публичными станут все твои переписки за 5 лет или вся история браузера?", "Готов{|а} ли ты удалить себе передний зуб без анестезии за 3 миллиона рублей?", "Что хуже: о твоей сексуальной жизни узнают родители или твои дети?", "Что хуже: навсегда отказаться от вредных привычек или навсегда от секса?", "Что хуже: партнёр изменяет телом, но любит тебя, или верен, но влюблён в другого?", "Незнакомец крадёт сумку у пожилой женщины. Вмешаешься, пройдёшь мимо или снимешь на телефон?"], "чернуха": ["Употреблял{|а} ли ты запрещённые вещества? Если да, то что?", "Какой самый серьёзный физический вред ты причинял{|а} человеку?", "Ездил{|а} ли ты за рулём в нетрезвом состоянии?", "Видел{|а} ли ты даркнет изнутри? Заходил{|а} на запрещённые страницы?", "Ты когда-нибудь воровал{|а}? Если да, что именно?", "Ты когда-нибудь кидал{|а} на деньги?", "Делал{|а} ли ты закладки или забирал{|а} их для кого-то?", "Давал{|а} ли ты взятку?", "Покрывал{|а} ли ты чьё-то преступление, зная о нём?", "Открывал{|а} ли ты кредит на чужое имя?", "Что ты сделал{|а} такого, за что тебе до сих пор стыдно перед законом или совестью?", "Поднимал{|а} ли ты когда-нибудь руку на партнёра?", "Приносил{|а} ли ты наркотики на работу, в университет или в общественное место?", "Ты когда-нибудь обманывал{|а} представителя власти? Как это было?", "Сидел{|а} ли ты когда-нибудь — тюрьма, сизо, ивс, спецприёмник? За что?", "Привлекал{ся|ась} ли ты к административной ответственности? За что?", "Уходил{|а} ли ты из заведения, не заплатив?", "Снимал{|а} ли ты человека во время секса без его ведома?", "Шантажировал{|а} ли ты когда-нибудь кого-то — даже в шутку?", "Подглядывал{|а} ли ты за людьми в туалете, душе, раздевалке?"], "исповедь": ["Ломал{|а} ли ты кости? Если да, то как это было?", "Тебя кидали на деньги?", "Кого из твоих близких уже нет в живых? Расскажи, что произошло", "Есть ли у тебя проблемы со здоровьем? Если есть, то какие?", "Ты когда-нибудь брал{|а} в долг или кредит больше миллиона рублей?", "Были ли у тебя операции? Какие именно?", "Удавалось ли тебе выигрывать в лотерее?", "Назови своё самое нелюбимое мужское и женское имя", "Сколько денег ты долж{ен|на} прямо сейчас? А сколько должны тебе?", "Какое максимальное количество денег ты зарабатывал{|а} за месяц?", "Как бы ты назвал{|а} своего ребёнка: мальчика? а девочку?", "Хочешь ли ты {жениться|выйти замуж} в ближайшие 2 года?", "Есть ли у тебя зависимость, которую ты не контролируешь? Какая?", "В каком возрасте ты перестал{|а} жить с родителями? И почему?", "Какое прозвище у тебя было в школе?", "Назови самые токсичные отношения в твоей жизни", "За что ты до сих пор не простил{|а} своих родителей?", "Что самое плохое сказали или сделали твои родители в твой адрес?", "В чём ты комплексуешь по поводу своей внешности?", "Какое самое сильное унижение ты пережил{|а}?"], "секс": ["Как часто ты мастурбируешь и как именно ты это делаешь?", "Спал{|а} ли ты с женатым или замужней?", "У тебя было больше или меньше 15 половых партнёров?", "Снимал{|а} ли ты когда-нибудь домашнее порно?", "Любишь ли ты получать или причинять боль во время секса?", "Ты предпоч{ёл|ла} бы ЖМЖ или МЖМ? Нужно выбрать что-то одно", "Был ли у тебя секс с окончанием внутрь без презерватива?", "У тебя есть фото или видео интимного характера в галерее телефона?", "Ты изменял{|а}? Если да, расскажи, как это было", "У тебя есть фетиш? Если да, то какой?", "Болел{|а} ли ты венерическими заболеваниями?", "У тебя был анальный секс?", "Назови свою любимую позу в сексе", "Какое минимальное время у тебя проходило между знакомством и сексом?", "В каком самом необычном месте у тебя был секс?", "Ты предпочитаешь секс с презервативом или без? Почему?", "Ты когда-нибудь платил{|а} или получал{|а} деньги за секс? Как это было?", "Был ли у тебя секс втроём? Как это было?", "Смотрел{|а} ли ты порно с животными?", "Пользуешься ли ты секс-игрушками? Какими конкретно?"]};
+  var CATS=Object.keys(Q);
+  var COLORVAR={"компания":"--c-комп","дилеммы":"--c-дил","чернуха":"--c-черн","исповедь":"--c-исп","секс":"--c-секс"};
+  var BASEW={"компания":20,"дилеммы":10,"чернуха":10,"исповедь":10};
+  var $=function(s){return document.querySelector(s);};
+  // ---- звук ----
+  var ICON_ON='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.5 6.5a9 9 0 0 1 0 11"/></svg>';
+  var ICON_OFF='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M22 9l-6 6"/><path d="M16 9l6 6"/></svg>';
+  var soundOn=true;try{soundOn=localStorage.getItem("duddl_snd")!=="0";}catch(e){}
+  var aCard=new Audio("assets/card_take.mp3");aCard.preload="auto";
+  var aIntro=new Audio("assets/game_intro.mp3");aIntro.preload="auto";
+  var aFold=new Audio("assets/card_fold.mp3");aFold.preload="auto";
+  function play(a){if(!soundOn)return;try{a.currentTime=0;var p=a.play();if(p)p.catch(function(){});}catch(e){}}
+  function renderSnd(){$("#sndBtn").innerHTML=soundOn?ICON_ON:ICON_OFF;$("#sndBtn").style.color=soundOn?"var(--dim)":"var(--muted)";}
+
+  var MALE={};"паша саша саня миша дима рома вова гоша лёша лёха гена гриша тёма сёма серёжа серёга костя витя коля толя петя вася боря федя яша жора лёва слава стёпа кеша юра тоша антоша никита илья кузьма фома савва лука добрыня данила гаврила игорь женя".split(" ").forEach(function(n){MALE[n]=1;});
+  var FEM={};"любовь нинель адель".split(" ").forEach(function(n){FEM[n]=1;});
+  function detect(name){var n=name.trim().toLowerCase();if(MALE[n])return"m";if(FEM[n])return"f";var c=n.slice(-1);return(c==="а"||c==="я")?"f":"m";}
+
+  var players=[],enabled={};CATS.forEach(function(k){enabled[k]=1;});
+  var orderMode="circle",timerOn=false,lenMode=0;
+  var CATHEX={"компания":"#2f9e5f","дилеммы":"#3b7bef","чернуха":"#9a9aa4","исповедь":"#e9e3d4","секс":"#d1302f"};
+  var CHANNEL="https://t.me/raimtriger";var curRaw="";
+
+  function saveCfg(){try{localStorage.setItem("duddl_cfg",JSON.stringify({p:players,o:orderMode,t:timerOn,e:enabled,l:lenMode}));}catch(e){}}
+  function loadCfg(){try{var c=JSON.parse(localStorage.getItem("duddl_cfg"));if(!c)return;
+    if(c.p&&c.p.length)players=c.p.map(function(p){return{name:p.name,g:(p.g==='f'?'f':'m')};});
+    if(c.o)orderMode=c.o;if(typeof c.t==='boolean')timerOn=c.t;
+    if(c.e)CATS.forEach(function(k){if(k in c.e)enabled[k]=c.e[k];});if(typeof c.l==='number')lenMode=c.l;}catch(e){}}
+  function applyCfgUI(){
+    $('#orderSeg').querySelectorAll('b').forEach(function(b){b.classList.toggle('sel',b.dataset.v===orderMode);});
+    $('#timerOpt').classList.toggle('on',timerOn);
+    $('#lenSeg').querySelectorAll('b').forEach(function(b){b.classList.toggle('sel',+b.dataset.v===lenMode);});}
+  function show(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('on');});$('#'+id).classList.add('on');}
+  function seen(){try{return localStorage.getItem("duddl_seen")==="1";}catch(e){return false;}}
+  $('#ageOk').addEventListener('click',function(){show(seen()?'setup':'howto');});
+  $('#howtoOk').addEventListener('click',function(){try{localStorage.setItem("duddl_seen","1");}catch(e){}show('setup');});
+  $('#rulesLink').addEventListener('click',function(){show('howto');});
+
+  var pName=$('#pName');
+  function addPlayer(){var n=pName.value.trim();if(!n)return;players.push({name:n,g:detect(n)});pName.value='';renderPlayers();validate();pName.focus();}
+  $('#pAdd').addEventListener('click',addPlayer);
+  pName.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();addPlayer();}});
+  function esc(s){return s.replace(/[&<>\"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function renderPlayers(){
+    var box=$('#players');
+    if(!players.length){box.innerHTML='<div class="empty">добавь минимум двух игроков · перетаскивай для порядка</div>';return;}
+    box.innerHTML='';
+    players.forEach(function(p,i){var el=document.createElement('div');el.className='pi';el.dataset.i=i;
+      el.innerHTML='<span class="grip"></span><span class="pn">'+esc(p.name)+'</span><span class="pg '+p.g+'" data-g>'+(p.g==='f'?'ж':'м')+'</span><span class="px" data-x>&times;</span>';
+      box.appendChild(el);});
+    box.querySelectorAll('[data-x]').forEach(function(x){x.addEventListener('click',function(e){e.stopPropagation();players.splice(+x.closest('.pi').dataset.i,1);renderPlayers();validate();});});
+    box.querySelectorAll('[data-g]').forEach(function(g){g.addEventListener('click',function(e){e.stopPropagation();var i=+g.closest('.pi').dataset.i;players[i].g=players[i].g==='f'?'m':'f';renderPlayers();saveCfg();});});
+    box.querySelectorAll('.grip').forEach(function(gr){gr.addEventListener('pointerdown',startDrag);});
+  }
+  var drag=null;
+  function startDrag(e){e.preventDefault();var row=e.target.closest('.pi');if(!row)return;
+    drag={row:row};row.classList.add('drag');row.setPointerCapture&&row.setPointerCapture(e.pointerId);
+    document.addEventListener('pointermove',moveDrag);document.addEventListener('pointerup',endDrag,{once:true});}
+  function moveDrag(e){if(!drag)return;var box=$('#players');var rows=[].slice.call(box.children);var y=e.clientY;var tgt=null;
+    rows.forEach(function(r){var b=r.getBoundingClientRect();if(y>b.top&&y<b.bottom&&r!==drag.row)tgt=r;});
+    if(tgt){var ti=+tgt.dataset.i,fi=+drag.row.dataset.i;var moved=players.splice(fi,1)[0];players.splice(ti,0,moved);
+      renderPlayers();drag.row=$('#players').children[ti];drag.row.classList.add('drag');}}
+  function endDrag(){if(drag&&drag.row)drag.row.classList.remove('drag');drag=null;document.removeEventListener('pointermove',moveDrag);renderPlayers();}
+
+  $('#orderSeg').querySelectorAll('b').forEach(function(b){b.addEventListener('click',function(){
+    $('#orderSeg').querySelectorAll('b').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');orderMode=b.dataset.v;});});
+  $('#timerOpt').addEventListener('click',function(){timerOn=!timerOn;this.classList.toggle('on',timerOn);saveCfg();});
+  $('#orderSeg').querySelectorAll('b').forEach(function(b){b.addEventListener('click',saveCfg);});
+  $('#lenSeg').querySelectorAll('b').forEach(function(b){b.addEventListener('click',function(){
+    $('#lenSeg').querySelectorAll('b').forEach(function(x){x.classList.remove('sel');});b.classList.add('sel');lenMode=+b.dataset.v;saveCfg();});});
+
+  function compLocked(){return players.length<4;}
+  function renderCats(){var box=$('#cats');box.innerHTML='';
+    CATS.forEach(function(k){var el=document.createElement('div');el.dataset.k=k;var locked=(k==="компания"&&compLocked());
+      el.className='cat'+(locked?' lock':(enabled[k]?' on':' off'));
+      el.innerHTML='<span class="nm sabaq">'+k+'</span>'+(locked?'<span class="lockhint">от 4 игроков</span>':'<span class="cnt mono">'+Q[k].length+'</span>')+'<span class="tg"></span>';
+      if(!locked)el.addEventListener('click',function(){enabled[k]=enabled[k]?0:1;renderCats();validate();});
+      box.appendChild(el);});}
+  function validate(){renderCats();
+    var avail=CATS.filter(function(k){return enabled[k]&&!(k==="компания"&&compLocked());}).length;
+    var ok=players.length>=2&&avail>=1;$('#startBtn').disabled=!ok;
+    var e='';if(players.length<2)e='нужно минимум 2 игрока';else if(avail<1)e='выбери хотя бы одну категорию';$('#setupErr').textContent=e;saveCfg();}
+
+  // ---- колода ----
+  var queues={},qi={},answered=0,total=0,turn=0,prevPlayer=-1;
+  var gameStart=0,sexFirst5=0;
+  function em(){return(Date.now()-gameStart)/60000;}
+  function activeCats(){return CATS.filter(function(k){return enabled[k]&&!(k==="компания"&&compLocked());});}
+  function alive(k){return queues[k]&&qi[k]<queues[k].length;}
+  function aliveCats(){return activeCats().filter(alive);}
+  function buildDeck(){queues={};qi={};total=0;answered=0;turn=0;prevPlayer=-1;sexFirst5=0;
+    activeCats().forEach(function(k){var a=Q[k].slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var x=a[i];a[i]=a[j];a[j]=x;}queues[k]=a;qi[k]=0;total+=a.length;});if(lenMode)total=Math.min(lenMode,total);}
+  function pickByWeights(cats,wfn){var sum=0,r;cats.forEach(function(k){sum+=wfn(k);});if(sum<=0)return cats[0];r=Math.random()*sum;
+    for(var i=0;i<cats.length;i++){r-=wfn(cats[i]);if(r<=0)return cats[i];}return cats[cats.length-1];}
+
+  function lerp(a,b,t){t=Math.max(0,Math.min(1,t));return a+(b-a)*t;}
+  // P(секс) по времени и полу
+  function sexProb(m,g){var v;
+    if(g==='f'){ if(m<4)v=0.15; else if(m<6)v=lerp(0.15,0.60,(m-4)/2); else if(m<30)v=0.60; else if(m<40)v=lerp(0.60,0.75,(m-30)/10); else v=0.75; }
+    else      { if(m<4)v=0.10; else if(m<6)v=lerp(0.10,0.40,(m-4)/2); else if(m<30)v=0.40; else if(m<40)v=lerp(0.40,0.50,(m-30)/10); else v=0.50; }
+    return v;}
+  function capSex(m){return m<5 && sexFirst5>=5;}              // лимит 5 секс-карт за 5 мин
+  function timerSexW(m){ if(m<4)return 12; if(m<6)return lerp(12,50,(m-4)/2); if(m<30)return 50; if(m<40)return lerp(50,65,(m-30)/10); return 65; }
+
+  function pickCategory(player){var m=em();var cats=aliveCats();if(cats.length===1)return cats[0];
+    var hasSex=cats.indexOf("секс")>=0;var sp=hasSex?sexProb(m,player.g):0;if(capSex(m))sp=0;
+    if(hasSex&&Math.random()<sp)return"секс";
+    var rest=cats.filter(function(k){return k!=="секс";});if(!rest.length)return"секс";
+    return pickByWeights(rest,function(k){return BASEW[k]||10;});}
+  function pickTimerCategory(){var m=em();var cats=aliveCats();if(capSex(m))cats=cats.filter(function(k){return k!=="секс";});
+    if(!cats.length)return null;return pickByWeights(cats,function(k){return k==="секс"?timerSexW(m):(BASEW[k]||10);});}
+
+  function nextPlayerIndex(){if(orderMode==='circle')return turn%players.length;
+    var i;do{i=Math.floor(Math.random()*players.length);}while(players.length>1&&i===prevPlayer);return i;}
+
+  // ---- таймер + драм-отсчёт ----
+  var tmrLeft=0,tmrCat=null,tmrId=null,forced=null;
+  function fmt(s){return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2);}
+  function newTimerCycle(){tmrCat=pickTimerCategory();
+    if(!tmrCat){$('#tmr').classList.remove('on');return;}
+    tmrLeft=60+Math.floor(Math.random()*91);
+    var col=getComputedStyle(document.documentElement).getPropertyValue(COLORVAR[tmrCat]);
+    var t=$('#tmr');t.classList.add('on');t.style.setProperty('--tc',col);
+    $('#tmrCat').textContent=tmrCat;$('#tmrTime').textContent='· '+fmt(tmrLeft);}
+  function showCD(n,cat){var col=getComputedStyle(document.documentElement).getPropertyValue(COLORVAR[cat]);
+    var cd=$('#cd');cd.style.setProperty('--cdc',col);$('#cdn').textContent=n;$('#cdcat').textContent=cat;cd.classList.add('on');
+    var el=$('#cdn');el.style.animation='none';void el.offsetWidth;el.style.animation='pop .4s ease';}
+  function hideCD(){$('#cd').classList.remove('on');}
+  function tickTimer(){if(!timerOn||!tmrCat)return;
+    tmrLeft--;$('#tmrTime').textContent='· '+fmt(Math.max(tmrLeft,0));
+    if(tmrLeft<=5&&tmrLeft>0){busy=true;showCD(tmrLeft,tmrCat);}
+    else if(tmrLeft<=0){hideCD();fireTimer();}}
+  function fireTimer(){
+    if(gated()){busy=false;return;}
+    var cat=(tmrCat&&alive(tmrCat))?tmrCat:pickTimerCategory();
+    if(!cat){busy=false;newTimerCycle();return;}
+    forced=cat;curIdx=Math.floor(Math.random()*players.length);   // ход случайному
+    buildFront();
+    card.classList.remove('out');card.classList.add('flip');phase='front';busy=false;play(aCard);
+    $('#bturn').textContent=players[curIdx].name;
+    newTimerCycle();
+  }
+
+  // ---- шеринг карты картинкой ----
+  function rr(x,a,b,w,hh,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+hh,r);x.arcTo(a+w,b+hh,a,b+hh,r);x.arcTo(a,b+hh,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();}
+  function hexA(hex,al){var n=parseInt(hex.slice(1),16);return "rgba("+((n>>16)&255)+","+((n>>8)&255)+","+(n&255)+","+al+")";}
+  function wrapC(x,t,mw){var ws=t.split(" "),out=[],cur="";for(var i=0;i<ws.length;i++){var s=(cur+" "+ws[i]).trim();if(x.measureText(s).width<=mw)cur=s;else{out.push(cur);cur=ws[i];}}if(cur)out.push(cur);return out;}
+  function shareImage(){try{
+    if(!curRaw)return;
+    var cat=curCat,q=expandG(curRaw,'m').toLowerCase();
+    var W=1080,H=1350,cv=document.createElement('canvas');cv.width=W;cv.height=H;var x=cv.getContext('2d');
+    Promise.all([document.fonts.load('700 60px "Sabaq"'),document.fonts.load('400 60px "Onest"')]).catch(function(){}).then(function(){
+      var m=70,R=44,hex=CATHEX[cat]||'#d1302f';
+      x.fillStyle='#0b0b0c';x.fillRect(0,0,W,H);
+      rr(x,m,m,W-2*m,H-2*m,R);x.fillStyle='#0f0f11';x.fill();x.lineWidth=2;x.strokeStyle='#222228';x.stroke();
+      x.save();rr(x,m,m,W-2*m,H-2*m,R);x.clip();
+      var g=x.createRadialGradient(m,m,0,m,m,(W-2*m)*0.95);g.addColorStop(0,hexA(hex,0.42));g.addColorStop(0.46,'rgba(0,0,0,0)');
+      x.fillStyle=g;x.fillRect(m,m,W-2*m,H-2*m);x.restore();
+      x.textAlign='center';
+      x.fillStyle=hex;x.font='700 46px "Sabaq"';x.textBaseline='alphabetic';x.fillText(cat,W/2,m+118);
+      var maxW=W-2*m-130,sz,lines;
+      for(sz=78;sz>=34;sz-=2){x.font='400 '+sz+'px "Onest"';lines=wrapC(x,q,maxW);if(lines.length<=8&&lines.length*sz*1.32<=H*0.5)break;}
+      x.fillStyle='#f3efe6';x.textBaseline='middle';var lh=sz*1.32,y=H/2-(lines.length-1)*lh/2;
+      lines.forEach(function(ln){x.fillText(ln,W/2,y);y+=lh;});
+      x.font='700 48px "Sabaq"';x.textBaseline='alphabetic';x.fillStyle='#54545c';
+      var wm='дуддл',ww=x.measureText(wm).width,side=Math.round(48*0.17),gap=10,tot=ww+gap+side,sx=W/2-tot/2,wy=H-m-150;
+      x.textAlign='left';x.fillText(wm,sx,wy);x.fillRect(sx+ww+gap,wy-side,side,side);
+      x.textAlign='center';x.font='400 30px "Onest"';x.fillStyle='#54545c';x.fillText('duddl.ru',W/2,H-m-92);
+      cv.toBlob(function(blob){if(!blob)return;var file=new File([blob],'duddl.png',{type:'image/png'});
+        if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],text:'дуддл · '+cat}).catch(function(){});}
+        else{var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='duddl.png';a.click();}},'image/png');
+    });
+  }catch(e){}}
+  // ---- карта ----
+  var card=$('#card'),phase='back',busy=false,curIdx=0,curCat=null;
+  function pad(n){return(n<10?'0':'')+n;}
+  function expandG(t,g){return t.replace(/\{([^|}]*)\|([^|}]*)\}/g,function(_,m,fm){return g==='f'?fm:m;});}
+  function personalize(player,t){return player.name+', '+expandG(t,player.g);}
+  function fitQ(text){var span=$('#fqt'),box=span.parentNode;span.textContent=text;span.style.lineHeight='1.26';
+    for(var s=23;s>=12;s--){span.style.fontSize=s+'px';if(span.scrollHeight<=Math.ceil(s*1.26*3)+1)return;}span.style.fontSize='12px';}
+
+  function prepareTurn(){curIdx=nextPlayerIndex();$('#bturn').textContent=players[curIdx].name;
+    var n=answered+1;$('#bnum').textContent=pad(n)+' / '+pad(total);$('#prog').textContent=pad(n)+' / '+pad(total);}
+  function buildFront(){var player=players[curIdx];curCat=forced||pickCategory(player);forced=null;
+    if(!alive(curCat))curCat=aliveCats()[0];
+    if(curCat==="секс"&&em()<5)sexFirst5++;
+    var t=queues[curCat][qi[curCat]++];curRaw=t;bump();
+    var col=getComputedStyle(document.documentElement).getPropertyValue(COLORVAR[curCat]);
+    $('#front').style.setProperty('--cat',col);$('#fcat').textContent=curCat;
+    var n=answered+1;$('#fnum').textContent=pad(n)+' / '+pad(total);$('#prog').textContent=pad(n)+' / '+pad(total);
+    fitQ(personalize(player,t));}
+
+  function startGame(){buildDeck();if(!aliveCats().length)return;phase='back';busy=false;card.classList.remove('flip','out');
+    prepareTurn();$('#ghint').textContent='тап — открыть · ещё тап — следующий';
+    var intro=$('#intro');intro.classList.add('on');play(aIntro);try{if(window.ym&&window.DUDDL_METRIKA)ym(window.DUDDL_METRIKA,'reachGoal','start');}catch(e){}
+    setTimeout(function(){show('game');gameStart=Date.now();
+      if(tmrId)clearInterval(tmrId);
+      if(timerOn){newTimerCycle();tmrId=setInterval(tickTimer,1000);}else{$('#tmr').classList.remove('on');}
+      setTimeout(function(){intro.classList.remove('on');},80);
+    },1150);}
+
+  card.addEventListener('click',function(){if(busy)return;
+    if(phase==='back'){if(gated())return;buildFront();card.classList.add('flip');phase='front';play(aCard);}else{advance();}});
+  function advance(){busy=true;play(aFold);answered++;turn++;prevPlayer=curIdx;
+    if(!aliveCats().length||answered>=total){endGame();return;}
+    card.classList.add('out');
+    setTimeout(function(){card.classList.remove('flip');prepareTurn();void card.offsetWidth;card.classList.remove('out');phase='back';busy=false;},300);}
+  function endGame(){phase='end';if(tmrId)clearInterval(tmrId);$('#tmr').classList.remove('on');hideCD();card.classList.remove('out');show('end');}
+
+  $('#startBtn').addEventListener('click',startGame);
+  $('#toMenu').addEventListener('click',function(){if(tmrId)clearInterval(tmrId);hideCD();show('setup');});
+  $('#again').addEventListener('click',startGame);
+  $('#endMenu').addEventListener('click',function(){show('setup');});
+  $('#share').addEventListener('click',function(){var d={title:'дуддл',text:'игра в откровенность для компаний 18+',url:'https://duddl.ru/'};
+    if(navigator.share){navigator.share(d).catch(function(){});}else if(navigator.clipboard){navigator.clipboard.writeText('https://duddl.ru/');this.textContent='ссылка скопирована';}});
+
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){if(phase==='front')fitQ($('#fqt').textContent);});}
+  if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}
+  renderSnd();
+  $('#shareBtn').addEventListener('click',shareImage);
+  $('#tgBtn').setAttribute('href',CHANNEL);
+  (function(){try{var dm=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;var inst=localStorage.getItem('duddl_inst')==='1';if(!dm&&!navigator.standalone&&!inst)$('#instHint').style.display='flex';}catch(e){}})();
+  $('#instX').addEventListener('click',function(){try{localStorage.setItem('duddl_inst','1');}catch(e){}$('#instHint').style.display='none';});
+  $("#sndBtn").addEventListener("click",function(){soundOn=!soundOn;try{localStorage.setItem("duddl_snd",soundOn?"1":"0");}catch(e){}renderSnd();if(soundOn)play(aCard);});
+  // ---- пейволл ----
+  var FREE=16,API='https://api.duddl.ru:8443/check?token=',BOT='https://t.me/duddl_bot?start=';
+  function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){}return null;}
+  (function(){var m=location.search.match(/[?&]t=([a-z0-9]{16,64})/i);
+    if(m){ls('duddl_tok',m[1]);ls('duddl_paid','');try{history.replaceState(null,'',location.pathname);}catch(e){}}})();
+  var tok=ls('duddl_tok');
+  if(!tok){tok='';for(var i=0;i<32;i++)tok+='0123456789abcdef'[Math.floor(Math.random()*16)];ls('duddl_tok',tok);}
+  function isPaid(){return ls('duddl_paid')==='1';}
+  function used(){return parseInt(ls('duddl_used')||'0',10)||0;}
+  function bump(){if(!isPaid())ls('duddl_used',String(used()+1));}
+  function gated(){if(isPaid()||used()<FREE)return false;
+    if(tmrId)clearInterval(tmrId);hideCD();$('#tmr').classList.remove('on');
+    $('#payBtn').setAttribute('href',BOT+tok);show('pay');return true;}
+  function checkPaid(){if(isPaid())return;
+    fetch(API+encodeURIComponent(tok)).then(function(r){return r.json();}).then(function(d){
+      if(d&&d.paid){ls('duddl_paid','1');if($('#pay').classList.contains('on'))show('setup');}}).catch(function(){});}
+  $('#payMenu').addEventListener('click',function(){show('setup');});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)checkPaid();});
+  checkPaid();
+
+  loadCfg();renderPlayers();renderCats();applyCfgUI();validate();
+  if(window.ym&&window.DUDDL_METRIKA){}
+})();
+</script><script>
+window.DUDDL_METRIKA=""; /* ← вставь сюда номер счётчика Яндекс.Метрики, напр. "99999999" */
+if(window.DUDDL_METRIKA){(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(window.DUDDL_METRIKA,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true});}
+</script>
+</body></html>

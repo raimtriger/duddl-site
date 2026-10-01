@@ -1,4 +1,4 @@
-const C="duddl-v11";const A=["./","index.html","manifest.json",
+const C="duddl-v12";const A=["./","index.html","manifest.json",
 "assets/sabaq.woff2","assets/onest.woff2","assets/onest-bold.woff2","assets/martianmono.woff2",
 "assets/card_take.mp3","assets/game_intro.mp3","assets/card_fold.mp3","assets/icon-192.png","assets/icon-512.png","assets/apple-touch-icon.png","assets/favicon-32.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(A)));self.skipWaiting();});

@@ -419,8 +419,6 @@
   // ---- пейволл ----
   var FREE=16,API='https://api.duddl.ru:8443/check?token=',BOT='https://t.me/duddl_bot?start=';
   function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){}return null;}
-  (function(){var m=location.search.match(/[?&]t=([a-z0-9]{16,64})/i);
-    if(m){ls('duddl_tok',m[1]);ls('duddl_paid','');try{history.replaceState(null,'',location.pathname);}catch(e){}}})();
   var tok=ls('duddl_tok');
   if(!tok){tok='';for(var i=0;i<32;i++)tok+='0123456789abcdef'[Math.floor(Math.random()*16)];ls('duddl_tok',tok);}
   function isPaid(){return ls('duddl_paid')==='1';}
@@ -429,9 +427,10 @@
   function gated(){if(isPaid()||used()<FREE)return false;
     if(tmrId)clearInterval(tmrId);hideCD();$('#tmr').classList.remove('on');
     $('#payBtn').setAttribute('href',BOT+tok);show('pay');return true;}
-  function checkPaid(){if(isPaid())return;
-    fetch(API+encodeURIComponent(tok)).then(function(r){return r.json();}).then(function(d){
-      if(d&&d.paid){ls('duddl_paid','1');if($('#pay').classList.contains('on'))show('setup');}}).catch(function(){});}
+  function checkPaid(){
+    fetch(API+encodeURIComponent(tok),{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      if(d&&d.paid){ls('duddl_paid','1');if($('#pay').classList.contains('on'))show('setup');}
+      else if(d&&d.paid===false){ls('duddl_paid','');}}).catch(function(){});}
   $('#payMenu').addEventListener('click',function(){show('setup');});
   document.addEventListener('visibilitychange',function(){if(!document.hidden)checkPaid();});
   checkPaid();
